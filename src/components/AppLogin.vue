@@ -39,15 +39,35 @@ export default {
         FormTag,
         TextInput,
     },
-    methods: {
-        submitHandler() {
-            console.log("called");
-        }
-    },
     data() {
         return {
             email: "",
             password: "",
+        }
+    },
+    methods: {
+        submitHandler() {
+            console.log("called");
+
+            const payload = {
+                email: this.email,
+                password: this.password,
+            };
+
+            const requestOptions = {
+                method: "POST",
+                body: JSON.stringify(payload),
+            };
+
+            fetch("http://localhost:8081/users/login", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    console.log(data.message);
+                } else {
+                    console.log(data);
+                }
+            });
         }
     },
 }
