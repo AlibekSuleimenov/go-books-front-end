@@ -32,6 +32,9 @@
 <script>
 import FormTag from './forms/FormTag.vue';
 import TextInput from './forms/TextInput.vue';
+import { store } from './store.js';
+import router from './../router/index.js';
+import notie from 'notie';
 
 export default {
     name: 'AppLogin',
@@ -43,6 +46,7 @@ export default {
         return {
             email: "",
             password: "",
+            store,
         }
     },
     methods: {
@@ -61,11 +65,19 @@ export default {
 
             fetch("http://localhost:8081/users/login", requestOptions)
             .then((response) => response.json())
-            .then((data) => {
-                if (data.error) {
-                    console.log(data.message);
+            .then((response) => {
+                if (response.error) {
+                    console.log(response.message);
+                    notie.alert({
+                        type: "error",
+                        text: response.message,
+                        stay: true,
+                        position: "bottom",
+                    });
                 } else {
-                    console.log(data);
+                    console.log("Token:", response.data.token.token);
+                    store.token = response.data.token.token;
+                    router.push("/");
                 }
             });
         }
