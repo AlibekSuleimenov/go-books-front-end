@@ -51,8 +51,6 @@ export default {
     },
     methods: {
         submitHandler() {
-            console.log("called");
-
             const payload = {
                 email: this.email,
                 password: this.password,
@@ -67,7 +65,6 @@ export default {
             .then((response) => response.json())
             .then((response) => {
                 if (response.error) {
-                    console.log(response.message);
                     notie.alert({
                         type: "error",
                         text: response.message,
@@ -75,8 +72,26 @@ export default {
                         position: "bottom",
                     });
                 } else {
-                    console.log("Token:", response.data.token.token);
                     store.token = response.data.token.token;
+                    store.user = {
+                        id: response.data.user.id,
+                        first_name: response.data.user.first_name,
+                        last_name: response.data.user.last_name,
+                        email: response.data.user.email,
+                    };
+                    
+                    // save info to cookie
+                    let date = new Date();
+                    let expiryDays = 1;
+                    date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 100));
+                    const expires = "expires=" + date.toUTCString();
+
+                    // set cookie
+                    document.cookie = "_site_data="
+                    + JSON.stringify(response.data)
+                    + "; "
+                    + expires
+                    + "; path=/; SameSite=strict; Secure;"
                     router.push("/");
                 }
             });
