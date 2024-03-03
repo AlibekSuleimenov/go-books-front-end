@@ -5,7 +5,7 @@
                 <h1 class="mt-3">All Users</h1>
             </div>
             <hr>
-            <table class="table table-compact table-striped">
+            <table v-if="this.ready" class="table table-compact table-striped">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -23,6 +23,8 @@
                     </tr>
                 </tbody>
             </table>
+
+            <p v-else>Loading...</p>
         </div>
     </div>
 </template>
@@ -35,6 +37,7 @@ export default {
     data() {
         return {
             users: [],
+            ready: false,
         }  
     },
     beforeMount() {
@@ -50,6 +53,7 @@ export default {
                 });
             } else {
                 this.users = response.data.users;
+                this.ready = true; 
             }
         }).catch((error) => {
             notie.alert({
