@@ -2,7 +2,7 @@
 <template>
   <AppHeader/>
   <div>
-    <router-view @success="success" @error="error" @warning="warning"></router-view>
+    <router-view :key="componentKey" @success="success" @error="error" @warning="warning" @forceUpdate="forceUpdate"></router-view>
   </div>
   <AppFooter/>
 </template>
@@ -27,7 +27,8 @@ export default {
   },
   data() {
     return {
-      store
+      store,
+      componentKey: 0, 
     }
   },
   beforeMount() {
@@ -65,6 +66,9 @@ export default {
         text: msg
       })
     },
+    forceUpdate() {
+      this.componentKey += 1;
+    }
   }
 }
 </script>
