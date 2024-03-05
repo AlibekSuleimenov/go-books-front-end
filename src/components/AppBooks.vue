@@ -54,6 +54,7 @@
 import { store } from '@/components/store';
 
 export default {
+    name: "AppBooks",
     data() {
         return {
             store,

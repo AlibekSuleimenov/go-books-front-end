@@ -3,7 +3,7 @@
   <AppHeader/>
   <div>
     <router-view v-slot="{ Component }" :key="componentKey" @success="success" @error="error" @warning="warning" @forceUpdate="forceUpdate">
-      <keep-alive>
+      <keep-alive include="AppBooks">
         <component :is="Component"></component>
       </keep-alive>
     </router-view>
