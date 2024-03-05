@@ -26,8 +26,12 @@
                             <div class="card me-2 ms-1 mb-3" style="width: 10rem;"
                             v-if="book.genre_ids.includes(currentFilter) || currentFilter === 0"
                             >
-                            <img :src="`${this.imagePath}/covers/${book.slug}.jpg`" class="card-img-top"
-                            :alt="`cover for ${book.title}`">
+                            
+                            <router-link :to="`/books/${book.slug}`">
+                                <img :src="`${this.imagePath}/covers/${book.slug}.jpg`" class="card-img-top"
+                                :alt="`cover for ${book.title}`">
+                            </router-link>
+                            
                             <div class="card-body text-center">
                                 <h6 class="card-title">{{  book.title }}</h6>
                                 <span class="book-author">{{ book.author.author_name }}</span><br>
