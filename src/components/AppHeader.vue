@@ -54,6 +54,7 @@ import router from './../router/index.js';
 import Security from './security.js';
 
 export default {
+  name: 'AppHeader',
   data() {
     return {
       store

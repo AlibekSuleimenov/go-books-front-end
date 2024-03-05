@@ -16,6 +16,7 @@
                         {{  this.book.description }}
                     </p>
                 </template>
+                <p v-else>Loading...</p>
             </div>
         </div>
     </div>
@@ -24,6 +25,7 @@
 <script>
 
 export default {
+    name: 'AppBook',
     data() {
         return {
             book: {},
