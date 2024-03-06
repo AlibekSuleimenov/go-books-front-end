@@ -99,9 +99,20 @@ export default {
         // get book for edit if id > 0 
         if (this.$route.params.bookId > 0) {
             // editing a book
-        } else {
-            // adding a book
-
+            fetch(process.env.VUE_APP_API_URL + "/admin/books/" + this.$route.params.bookId, Security.requestOptions(""))
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    this.$emit("error", data.message);
+                } else {
+                    this.book = data.data;
+                    let genreArray = [];
+                    for (let i = 0; i < this.book.genres.length; i++) {
+                        genreArray.push(this.book.genres[i].id);
+                    }
+                    this.book.genre_ids = genreArray;
+                }
+            });
         }
 
         // get list of authors for drop down
@@ -215,3 +226,10 @@ export default {
     }
 }
 </script>
+
+
+<style scoped>
+.book-cover {
+    max-width: 10em;
+}
+</style>
