@@ -22,5 +22,6 @@
 export default {
     name: 'SelectInput',
     props: ["items", "name", "required", "label", "modelValue", "multiple"],
+    emits: ['updateModelValue'],
 }
 </script>
