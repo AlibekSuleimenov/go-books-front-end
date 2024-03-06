@@ -54,6 +54,32 @@
                         ></textarea>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="genres" class="form-label">Genres</label>
+                        <select ref="genres"
+                        class="form-select"
+                        id="genres"
+                        required
+                        size=7
+                        v-model="this.book.genre_ids"
+                        multiple>
+                    <option v-for="genre in this.genres" :value="genre.value" :key="genre.value">
+                    {{ genre.text }}
+                    </option>
+                    </select>
+                    </div>
+
+                    <hr>
+
+                    <div class="float-start">
+                        <input type="submit" class="btn btn-primary me-2" value="Save" >
+                        <router-link to="/admin/books" class="btn btn-outline-secondary">Cancel</router-link>
+                    </div>
+                    <div class="float-end">
+                        <a v-if="this.book.id > 0" class="btn btn-dange" href="javascript:void(0);" 
+                            @click="confirmDelete(this.book.id)">Delete</a>
+                    </div>
+
                 </form-tag>
             </div>
         </div>
@@ -65,7 +91,8 @@ import Security from './security.js';
 import FormTag from '@/components/forms/FormTag.vue';
 import TextInput from '@/components/forms/TextInput.vue';
 import SelectInput from '@/components/forms/SelectInput.vue'; 
-// import { notie } from 'notie';
+import router from '@/router/index.js';
+import { notie } from 'notie';
 
 export default {
     name: 'BookEdit',
@@ -105,10 +132,66 @@ export default {
     },
     methods: {
         submitHandler() {
+            const payload = {
+                id: this.book.id,
+                title: this.book.title,
+                author_id: parseInt(this.book.author_id, 10),
+                publication_year: this.book.publication_year,
+                description: this.book.description,
+                cover: this.book.cover,
+                slug: this.book.slug,
+                genre_ids: this.book.genre_ids,
+            };
 
+            fetch(`${process.env.VUE_APP_API_URL}/admin/books/save`, Security.requestOptions(payload))
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    this.$emit("error", data.message);
+                } else {
+                    this.$emit("success", "Changes Saved!");
+                    router.push("/admin/books");
+                }
+            }).catch((error) => {
+                this.$emit("error", error);
+            });
         },
         loadCoverImage() {
+            // get a reference to the input
+            const file = this.$refs.coverInput.files[0];
 
+            // encode the file using FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result
+                .replace("data:", "")
+                .replace(/^.+,/, "");
+            this.book.cover = base64String;
+            // alert(base64String);
+            };
+            reader.readAsDataURL(file);
+        },
+        confirmDelete(id) {
+            notie.confirm({
+                text: "Are tou sure you want to delete this book?",
+                submitText: "Delete",
+                submitCallback: () => {
+                    let payload = {
+                        id: id,
+                    };
+
+                    fetch(process.env.VUE_APP_API_URL + "/admin/books/delete", Security.requestOptions(payload))
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.error) {
+                            this.$emit("error", data.message);
+                        } else {
+                            this.$emit("success", "Book deleted");
+                            router.push("/admin/books");
+                        }             
+                    });
+                },
+            });
         }
     }
 }
