@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AppBody from "./../components/AppBody.vue"
 import AppLogin from "./../components/AppLogin.vue"
-import AppBooks from "./../components/AppBooks.vue";
-import AppBook from "./../components/AppBook.vue";
+import BooksComposition from "./../components/BooksComposition.vue";
+import BookComposition from "./../components/BookComposition.vue";
 import BooksAdmin from "./../components/BooksAdmin.vue";
 import BookEdit from "./../components/BookEdit.vue";
 import AppUsers from "./../components/AppUsers.vue";
@@ -22,13 +22,13 @@ const routes = [
     },
     {
         path: '/books',
-        name: 'Books',
-        component: AppBooks,
+        name: 'BooksComposition',
+        component: BooksComposition,
     },
     {
         path: '/books/:bookName',
-        name: 'Book',
-        component: AppBook,
+        name: 'BookComposition',
+        component: BookComposition,
     },
     {
         path: '/admin/books',
